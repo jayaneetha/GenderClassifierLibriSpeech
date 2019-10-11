@@ -3,7 +3,7 @@ import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.keras.layers import LSTM, Flatten, Dense, TimeDistributed, Conv1D, \
-    MaxPooling1D, Dropout
+    MaxPooling1D
 from tensorflow.python.keras.models import Sequential
 
 from constants import NUM_MFCC, NUM_FRAMES
@@ -47,8 +47,8 @@ def main():
     model.add(TimeDistributed(Conv1D(filters=8, kernel_size=2, padding='same', activation=tf.nn.relu)))
     model.add(TimeDistributed(MaxPooling1D(pool_size=2)))
     model.add(TimeDistributed(Flatten()))
-    model.add(LSTM(50, return_sequences=True))
-    model.add(Dropout(0.3))
+    model.add(LSTM(10, return_sequences=True))
+    # model.add(Dropout(0.3))
     model.add(Flatten())
     model.add(Dense(units=512, activation=tf.nn.tanh))
     model.add(Dense(units=256, activation=tf.nn.tanh))
