@@ -9,7 +9,7 @@ from tensorflow.python.keras.models import Sequential
 from constants import NUM_MFCC, NUM_FRAMES
 from dataset import get_dataset, get_mfccs, save_to_pkl
 
-feature_actions = 'load-from-wav'  # { 'load-from-pkl', 'load-from-wav' }
+feature_actions = 'load-from-pkl'  # { 'load-from-pkl', 'load-from-wav' }
 feature_store = True  # save the feature pkl file
 
 
@@ -89,12 +89,12 @@ def test(x_audio_testing, y_test, model):
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-    # tf.keras.backend.clear_session()
-    #
-    # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
-    # config = tf.ConfigProto(gpu_options=gpu_options)
-    # config.gpu_options.allow_growth = True
-    # sess = tf.Session(config=config)
-    # tf.compat.v1.keras.backend.set_session(sess)
+    tf.keras.backend.clear_session()
+
+    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
+    config = tf.ConfigProto(gpu_options=gpu_options)
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+    tf.compat.v1.keras.backend.set_session(sess)
 
     main()
