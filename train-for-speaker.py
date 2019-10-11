@@ -9,7 +9,7 @@ from tensorflow.python.keras.models import Sequential
 from constants import NUM_MFCC, NUM_FRAMES
 from dataset import get_dataset, get_mfccs, save_to_pkl
 
-feature_actions = 'load-from-pkl'  # { 'load-from-pkl', 'load-from-wav' }
+feature_actions = 'load-from-wav'  # { 'load-from-pkl', 'load-from-wav' }
 feature_store = True  # save the feature pkl file
 
 
