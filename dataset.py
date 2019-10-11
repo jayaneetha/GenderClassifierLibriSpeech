@@ -137,7 +137,7 @@ def get_mfccs(file_list=False, pickle_file=False):
         x_audio = []
         for i in range(len(file_list)):
             if i % 100 == 0:
-                print("{0:.2f} loaded in X_train".format(i / len(file_list)))
+                print("{0:.2f} loaded ".format(i / len(file_list)))
             x_audio.append(np.reshape(get_mfcc(file_list[i]), [NUM_MFCC, NUM_FRAMES, 1]))
         return x_audio
 

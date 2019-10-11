@@ -7,7 +7,7 @@ from tensorflow.python.keras.layers import LSTM, Flatten, Dense, TimeDistributed
 from tensorflow.python.keras.models import Sequential
 
 from constants import NUM_MFCC, NUM_FRAMES
-from dataset import get_mfcc, get_dataset, get_mfccs, save_to_pkl
+from dataset import get_dataset, get_mfccs, save_to_pkl
 
 feature_actions = 'load-from-wav'  # { 'load-from-pkl', 'load-from-wav' }
 feature_store = True  # save the feature pkl file
@@ -23,14 +23,17 @@ def main():
     if feature_actions == 'load-from-wav':
         x_audio_training = get_mfccs(X_train)
         x_audio_validation = get_mfccs(X_valid)
+        x_audio_testing = get_mfccs(X_test)
 
         if feature_store:
             save_to_pkl(x_audio_training, 'training.pkl')
             save_to_pkl(x_audio_validation, 'validation.pkl')
+            save_to_pkl(x_audio_testing, 'testing.pkl')
 
     elif feature_actions == 'load-from-pkl':
         x_audio_training = get_mfccs(pickle_file='training.pkl')
         x_audio_validation = get_mfccs(pickle_file='validation.pkl')
+        x_audio_testing = get_mfccs(pickle_file='testing.pkl')
     else:
         print("Error in 'feature_actions'")
         return
@@ -67,20 +70,20 @@ def main():
     print("Saving model as {}".format(model_name))
     model.save_weights(model_name + '.h5')
 
-    test(X_test, y_test, model)
+    test(x_audio_testing, y_test, model)
 
 
-def test(X_test, y_test, model):
+def test(x_audio_testing, y_test, model):
     correct_count = 0
-    print("Testing on {} datasets".format(len(X_test)))
-    for i in range(len(X_test)):
-        audio = np.reshape(get_mfcc(X_test[i]), [1, NUM_MFCC, NUM_FRAMES, 1])
+    print("Testing on {} datasets".format(len(x_audio_testing)))
+    for i in range(len(x_audio_testing)):
+        audio = np.reshape(x_audio_testing[i], [1, NUM_MFCC, NUM_FRAMES, 1])
         predict_index = np.argmax(model.predict(audio))
         true_index = np.argmax(y_test[i])
         if predict_index == true_index:
             correct_count += 1
 
-    test_accuracy = (correct_count / len(X_test) * 100)
+    test_accuracy = (correct_count / len(x_audio_testing) * 100)
     print("Test Accuracy: {}".format(test_accuracy))
 
 
