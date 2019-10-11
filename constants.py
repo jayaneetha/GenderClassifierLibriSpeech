@@ -31,12 +31,12 @@ if host == 'Thejans-MacBook-Pro.local':
 
 if host == 'rnd-gpu':
     DATASET_STR = 'dev-clean'
-    DATA_ROOT = '/Volumes/Kingston/datasets/audio/LibriSpeech/LibriSpeech/'
+    DATA_ROOT = '/home/thejanr/dataset/LibriSpeech/'
     DATA_DIR = DATA_ROOT + DATASET_STR + '/'
     SPEAKER_FILE = DATA_ROOT + 'SPEAKERS.TXT'
-    SPEAKER_IDX = 8
-    CHAPTER_IDX = 9
-    FILENAME_IDX = 10
+    SPEAKER_IDX = 6
+    CHAPTER_IDX = 7
+    FILENAME_IDX = 8
     NUM_CLASSES = 40
 
 if len(CLASSES) > 0:
