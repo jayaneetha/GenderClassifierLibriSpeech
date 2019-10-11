@@ -47,7 +47,7 @@ def main():
     model.add(TimeDistributed(Conv1D(filters=8, kernel_size=2, padding='same', activation=tf.nn.relu)))
     model.add(TimeDistributed(MaxPooling1D(pool_size=2)))
     model.add(TimeDistributed(Flatten()))
-    model.add(LSTM(10, return_sequences=True))
+    model.add(LSTM(50, return_sequences=True))
     # model.add(Dropout(0.3))
     model.add(Flatten())
     model.add(Dense(units=512, activation=tf.nn.tanh))
