@@ -1,5 +1,6 @@
 import glob
 import os
+import pickle
 import random
 
 import librosa
@@ -7,7 +8,7 @@ import numpy as np
 from tensorflow.python.keras.utils import to_categorical
 
 from constants import DATA_DIR, CLASSES, SPEAKER_IDX, CHAPTER_IDX, FILENAME_IDX, DURATION, NUM_MFCC, \
-    SPEAKER_FILE, DATASET_STR, GENDER_CLASSES, NUM_CLASSES
+    SPEAKER_FILE, DATASET_STR, GENDER_CLASSES, NUM_CLASSES, NUM_FRAMES, PICKLE_FILE_PREFIX
 
 speaker_gender_map = {}
 TEMP_CLASS_INDEX = []
@@ -124,6 +125,23 @@ def get_speaker_ids():
     return speaker_ids
 
 
+def get_mfccs(file_list=False, pickle_file=False):
+    if pickle_file:
+        pickle_file = PICKLE_FILE_PREFIX + pickle_file
+        print("loading from pickle file : {}".format(pickle_file))
+        infile = open(pickle_file, 'rb')
+        x_audio = pickle.load(infile)
+        infile.close()
+        return x_audio
+    else:
+        x_audio = []
+        for i in range(len(file_list)):
+            if i % 100 == 0:
+                print("{0:.2f} loaded in X_train".format(i / len(file_list)))
+            x_audio.append(np.reshape(get_mfcc(file_list[i]), [NUM_MFCC, NUM_FRAMES, 1]))
+        return x_audio
+
+
 def get_dataset(class_type='gender'):
     """@:param class_type: str - type of class needed to be in Y.
         values { 'gender' , 'speaker' }
@@ -204,3 +222,11 @@ def get_XY_speaker(fileList):
             y.append(TEMP_CLASS_INDEX.index(speaker_id))
 
     return x, y
+
+
+def save_to_pkl(data, filename):
+    filename = PICKLE_FILE_PREFIX + filename
+    print("Storing {} data to file: {}".format(len(data), filename))
+    outfile = open(filename, 'wb')
+    pickle.dump(data, outfile)
+    outfile.close()

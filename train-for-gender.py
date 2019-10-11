@@ -7,7 +7,10 @@ from tensorflow.python.keras.layers import LSTM, Flatten, Dense, TimeDistributed
 from tensorflow.python.keras.models import Sequential
 
 from constants import NUM_MFCC, NUM_FRAMES
-from dataset import get_mfcc, get_dataset
+from dataset import get_mfcc, get_dataset, get_mfccs, save_to_pkl
+
+feature_actions = 'load-from-wav'  # { 'load-from-pkl', 'load-from-wav' }
+feature_store = True  # save the feature pkl file
 
 
 def main():
@@ -17,18 +20,20 @@ def main():
     print("Testing length: {}".format(len(X_test)))
     print("Validation length: {}".format(len(X_valid)))
 
-    x_audio_training = []
+    if feature_actions == 'load-from-wav':
+        x_audio_training = get_mfccs(X_train)
+        x_audio_validation = get_mfccs(X_valid)
 
-    for i in range(len(X_train)):
-        if i % 100 == 0:
-            print("{0:.2f} loaded in X_train".format(i / len(X_train)))
-        x_audio_training.append(np.reshape(get_mfcc(X_train[i]), [NUM_MFCC, NUM_FRAMES, 1]))
+        if feature_store:
+            save_to_pkl(x_audio_training, 'training.pkl')
+            save_to_pkl(x_audio_validation, 'validation.pkl')
 
-    x_audio_validation = []
-    for i in range(len(X_valid)):
-        if i % 100 == 0:
-            print("{0:.2f} loaded in X_valid".format(i / len(X_valid)))
-        x_audio_validation.append(np.reshape(get_mfcc(X_valid[i]), [NUM_MFCC, NUM_FRAMES, 1]))
+    elif feature_actions == 'load-from-pkl':
+        x_audio_training = get_mfccs(pickle_file='training.pkl')
+        x_audio_validation = get_mfccs(pickle_file='validation.pkl')
+    else:
+        print("Error in 'feature_actions'")
+        return
 
     model = Sequential()
 
@@ -81,12 +86,12 @@ def test(X_test, y_test, model):
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-    tf.keras.backend.clear_session()
-
-    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
-    config = tf.ConfigProto(gpu_options=gpu_options)
-    config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
-    tf.compat.v1.keras.backend.set_session(sess)
+    # tf.keras.backend.clear_session()
+    #
+    # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
+    # config = tf.ConfigProto(gpu_options=gpu_options)
+    # config.gpu_options.allow_growth = True
+    # sess = tf.Session(config=config)
+    # tf.compat.v1.keras.backend.set_session(sess)
 
     main()
