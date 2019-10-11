@@ -88,7 +88,7 @@ def test(x_audio_testing, y_test, model):
 
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     tf.keras.backend.clear_session()
 
     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)

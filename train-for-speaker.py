@@ -64,7 +64,7 @@ def main():
     x_valid = np.reshape(x_audio_validation, [len(x_audio_validation), NUM_MFCC, NUM_FRAMES, 1])
 
     print("Start Fitting")
-    model.fit(x_train, y_train, batch_size=8, epochs=15, verbose=1, validation_data=(x_valid, y_valid))
+    model.fit(x_train, y_train, batch_size=8, epochs=30, verbose=1, validation_data=(x_valid, y_valid))
 
     model_name = 'Libri_Speaker_v1'
     print("Saving model as {}".format(model_name))
