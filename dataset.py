@@ -1,10 +1,10 @@
 import glob
-import os
 import pickle
-import random
 
 import librosa
 import numpy as np
+import os
+import random
 from tensorflow.python.keras.utils import to_categorical
 
 from constants import DATA_DIR, CLASSES, SPEAKER_IDX, CHAPTER_IDX, FILENAME_IDX, DURATION, NUM_MFCC, \
@@ -127,11 +127,7 @@ def get_speaker_ids():
 
 def get_mfccs(file_list=False, pickle_file=False):
     if pickle_file:
-        pickle_file = PICKLE_FILE_PREFIX + pickle_file
-        print("loading from pickle file : {}".format(pickle_file))
-        infile = open(pickle_file, 'rb')
-        x_audio = pickle.load(infile)
-        infile.close()
+        x_audio = load_from_pkl(pickle_file)
         return x_audio
     else:
         x_audio = []
@@ -230,3 +226,12 @@ def save_to_pkl(data, filename):
     outfile = open(filename, 'wb')
     pickle.dump(data, outfile)
     outfile.close()
+
+
+def load_from_pkl(filename):
+    filename = PICKLE_FILE_PREFIX + filename
+    print("loading from pickle file : {}".format(filename))
+    infile = open(filename, 'rb')
+    data = pickle.load(infile)
+    infile.close()
+    return data
