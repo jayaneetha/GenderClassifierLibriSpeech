@@ -1,4 +1,4 @@
 librosa==0.7.0
 numpy==1.16.5
 tensorboard==1.14.0
-tensorflow==1.14.0
+tensorflow==2.5.3
